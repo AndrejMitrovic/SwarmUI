@@ -68,7 +68,11 @@ class GenPageBrowserClass {
         this.container = getRequiredElementById(container);
         this.listFoldersAndFiles = listFoldersAndFiles;
         this.id = id;
-        this.format = localStorage.getItem(`browser_${this.id}_format`) || getCookie(`${id}_format`) || defaultFormat; // TODO: Remove the old cookie
+
+        const fmt = localStorage.getItem(`browser_${this.id}_format`);
+        const cookie = getCookie(`${id}_format`);
+        // setCookie(`${id}_format`, format, 90);  // drey
+        this.format = fmt || cookie || defaultFormat; // TODO: Remove the old cookie
         this.describe = describe;
         this.select = select;
         this.folder = '';
@@ -579,6 +583,9 @@ class GenPageBrowserClass {
             }
             formatSelector.addEventListener('change', () => {
                 this.format = formatSelector.value;
+
+                // drey
+                setCookie(`${this.id}_format`, this.format, 90);
                 localStorage.setItem(`browser_${this.id}_format`, this.format);
                 this.updateWithoutDup();
             });
